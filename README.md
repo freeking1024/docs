@@ -1,0 +1,2 @@
+# docs
+Personal thinking document
