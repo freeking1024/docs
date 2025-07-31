@@ -1,6 +1,6 @@
 # TCP/UDP
 
-&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/tcp-message.PNG" alt="TCP 数据包" width="500px" marginLeft='16px'/>
+<img src="../images/tcp-message.PNG" alt="TCP 数据包" width="500px" marginLeft='16px'/>
 
 1.  三次握手：
 
@@ -45,8 +45,8 @@
 
     - 背景：双方发收速率不一致
     - 解决：<br/>
-      滑动窗口 - 发送端<br/> - 已经发送并且确认的 TCP 段（已经发送并确认）；<br/> - 已经发送但是没有确认的 TCP 段（已经发送未确认）；<br/> - 未发送但是接收方准备接收的 TCP 段（可以发送）；<br/> - 未发送并且接收方也并未准备接受的 TCP 段（不可发送）。
-           <img src='../images/tcp-send-slide-window.png' alt='发送端滑动窗口' width='500px'/>
+      滑动窗口 - 发送端<br/> - 已经发送并且确认的 TCP 段（已经发送并确认）；<br/> - 已经发送但是没有确认的 TCP 段（已经发送未确认）；<br/> - 未发送但是接收方准备接收的 TCP 段（可以发送）；<br/> - 未发送并且接收方也并未准备接受的 TCP 段（不可发送）。<br/>
+      <img src='../images/tcp-send-slide-window.png' alt='发送端滑动窗口' width='500px'/>
     - 滑动窗口 - 接收端<br/>
 
       - 已经接收并且已经确认的 TCP 段（已经接收并确认）；<br/>
@@ -56,7 +56,7 @@
         <img src='../images/tcp-receive-slide-window.png' alt='接收端滑动窗口' width='500px'>
 
 5.  拥塞控制
-    TCP 发送方要维持一个 拥塞窗口(cwnd) 的状态变量。拥塞控制窗口的大小取决于网络的拥塞程度，并且动态变化。发送方让自己的发送窗口取为拥塞窗口和接收方的接受窗口中较小的一个。
+    TCP 发送方要维持一个 拥塞窗口(cwnd) 的状态变量。拥塞控制窗口的大小取决于网络的拥塞程度，并且动态变化。发送方让自己的发送窗口取为拥塞窗口和接收方的接受窗口中较小的一个。<br/>
     <img src='../images/cwnd.png' alt='cwnd' width='500px'>
 
     - 慢开始：慢开始试探网络，指数增长
