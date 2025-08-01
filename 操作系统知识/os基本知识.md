@@ -63,4 +63,64 @@
 - **并发性**：线程间通信效率更高，但更容易发生同步问题；进程之间更独立，但通信较复杂。
   `进程适用于需要强隔离的场景，线程则适用于需要高效并发的场景。`
 
-## Q4:死锁怎么产生的？如何解决呢？
+## Q4：线程之间如何通信呢？
+
+1. 线程间通信：
+
+   - 互斥锁：Java 中的 `synchronized`、`Lock`
+   - 读写锁：`ReadWriteLock`
+   - 信号量：`Semaphore`
+   - 屏障：`CyclicBarrier`
+   - 事件：Object 类的方法`wait()` 和 `notify()` / `notifyAll()`
+   - 线程安全的集合：
+
+   ```java
+   public static void main(String[] args) {
+        // 创建一个普通的 ArrayList
+        List<String> list = new ArrayList<>();
+
+        // 使用 Collections.synchronizedList 包装成线程安全的 List
+        List<String> synchronizedList = Collections.synchronizedList(list);
+
+        // 创建一个普通的 HashMap
+        Map<String, Integer> map = new HashMap<>();
+
+        // 使用 Collections.synchronizedMap 包装成线程安全的 Map
+        Map<String, Integer> synchronizedMap = Collections.synchronizedMap(map);
+
+        // 创建一个普通的 HashSet
+        Set<String> set = new HashSet<>();
+
+        // 使用 Collections.synchronizedSet 包装成线程安全的 Set
+        Set<String> synchronizedSet = Collections.synchronizedSet(set);
+    }
+   ```
+
+   > ❗️ 注意 ​：虽然这些集合通过 Collections.synchronizedXXX() 变成了线程安全，但在复合操作 ​（如“检查再执行”——check-then-act）时，仍然需要手动进行同步。例如：
+   >
+   > ```java
+   > synchronized (synchronizedList) {
+   >    if (!synchronizedList.contains("item")) {
+   >        synchronizedList.add("item");
+   >    }
+   > }
+   > ```
+   >
+   > | 集合类型    | 线程安全实现类        | 特点                                                                     |
+   > | ----------- | --------------------- | ------------------------------------------------------------------------ |
+   > | List        | CopyOnWriteArrayList  | 写时复制（Copy-On-Write）机制，适合读多写少的场景，写操作开销较大        |
+   > | Set         | CopyOnWriteArraySet   | 基于 CopyOnWriteArrayList 实现的线程安全 Set                             |
+   > | Map         | ConcurrentHashMap     | 高并发优化的哈希表，分段锁机制（Java 7）或 CAS + synchronized（Java 8+） |
+   > | Queue/Deque | ConcurrentLinkedQueue | 无界非阻塞队列，基于 CAS 实现，适合高并发场景                            |
+   > |             | ArrayBlockingQueue    | 有界阻塞队列，基于锁实现，适合生产者-消费者模型                          |
+   > |             | LinkedBlockingQueue   | 无界阻塞队列，基于链表实现，适合高并发场景                               |
+   > |             | PriorityBlockingQueue | 优先级阻塞队列，基于堆实现，元素有序                                     |
+   > |             | DelayQueue            | 延迟队列，基于优先级队列实现，元素延迟到期后才能被消费                   |
+
+## Q5：进程间是怎么通信的呢？
+
+> 进程间通信（IPC）是指在不同进程之间交换信息的机制。
+
+[进程之间的通信（IPC）](https://www.jianshu.com/p/c1015f5ffa74)
+
+## Q:死锁怎么产生的？如何解决呢？
