@@ -163,3 +163,39 @@
 4. **参数调整**：可以通过调整`innodb_old_blocks_pct`参数来设置 young 区域和 old 区域的比例。
 
 5. **性能监控与优化**：开启慢 SQL 监控后，如果发现偶尔出现执行时间较长的 SQL，可能是由于脏页刷新到磁盘导致的数据库性能波动。此时，可能需要调大 Buffer Pool 空间或 redo log 日志的大小来优化性能。
+
+## sql 的执行顺序
+
+在 MySQL 中，SQL 查询语句的执行顺序遵循一定的逻辑顺序，尽管你在编写 SQL 语句时可能会按照不同的顺序来写这些子句。
+
+1. **FROM**：首先确定数据来源的表或视图。如果涉及到多个表，则会进行表之间的连接操作。
+
+2. **WHERE**：对来自 FROM 子句的数据进行过滤。只有满足 WHERE 条件的数据行才会被选中用于后续处理。这个阶段不包括聚合函数（如 COUNT, SUM 等）。
+
+3. **GROUP BY**：将符合条件的数据行按指定列或表达式分组。这一步是为使用聚合函数做准备。在同一组内的所有行会被视为一个整体来计算聚合函数的结果。
+
+4. **HAVING**：在完成 GROUP BY 之后，HAVING 子句可以用来进一步过滤由 GROUP BY 产生的分组。只有满足 HAVING 条件的组才会被保留下来。
+
+5. **SELECT**：此时开始处理 SELECT 列表中的元素，包括选择列、表达式、以及应用聚合函数（如 COUNT）。注意，虽然 SELECT 位于此步骤，但它是在 GROUP BY 和 HAVING 之后执行的，意味着聚合函数在此阶段才真正生效。
+
+6. **ORDER BY**：最后，根据 ORDER BY 子句指定的一个或多个列对结果集进行排序。可以指定升序（ASC）或者降序（DESC）排列。
+
+7. **LIMIT/OFFSET**：如果存在，LIMIT 和 OFFSET 子句用于限制返回给用户的行数，并且指定从哪一行开始返回结果。（这部分不是每个查询必须的）
+
+例如，考虑以下 SQL 查询：
+
+```sql
+SELECT department, COUNT(*) as dept_count
+FROM employees
+WHERE salary > 50000
+GROUP BY department
+HAVING COUNT(*) > 5
+ORDER BY dept_count DESC;
+```
+
+- 首先，`FROM employees` 指定了数据源。
+- 然后，`WHERE salary > 50000` 过滤掉薪资不大于 50000 的员工记录。
+- 接着，`GROUP BY department` 根据部门对剩余的记录进行分组。
+- `HAVING COUNT(*) > 5` 保证只有那些有超过 5 名员工的部门才会出现在最终结果中。
+- `SELECT department, COUNT(*) as dept_count` 选择要显示的列，即部门名称和该部门的员工数量。
+- 最终，`ORDER BY dept_count DESC` 按照每个部门的员工数量降序排列输出结果。
