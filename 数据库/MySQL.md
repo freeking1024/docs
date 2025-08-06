@@ -144,3 +144,22 @@
 ## Q12：mysql 的 b+树是怎么回事？
 
 [换个角度看 b+树](https://mp.weixin.qq.com/s/A5gNVXMNE-iIlY3oofXtLw)
+
+## Q13：Buffer Pool
+
+1. **缓冲池（Buffer Pool）**：InnoDB 设计了缓冲池来提高数据库的读写性能，它以页为单位缓存数据，默认大小为 128M，可以通过`innodb_buffer_pool_size`参数进行调整。
+
+2. **缓冲池管理**：InnoDB 通过三种链表来管理缓存页：
+
+   - Free List（空闲页链表）：管理空闲页。
+   - Flush List（脏页链表）：管理脏页。
+   - LRU List（最近最少使用链表）：管理脏页和干净页，将最近且经常查询的数据缓存在其中，不常查询的数据则被淘汰出去。
+
+3. **LRU 优化**：InnoDB 对传统的 LRU 算法进行了两点优化：
+
+   - 将 LRU 链表分为 young 和 old 两个区域，新加入缓冲池的页优先插入 old 区域，只有当页被访问时才进入 young 区域，这有助于解决预读失效的问题。
+   - 当页被访问且在 old 区域停留时间超过`innodb_old_blocks_time`阈值（默认为 1 秒）时，才会将页插入到 young 区域，否则仍留在 old 区域，这有助于解决批量数据访问导致大量热数据被淘汰的问题。
+
+4. **参数调整**：可以通过调整`innodb_old_blocks_pct`参数来设置 young 区域和 old 区域的比例。
+
+5. **性能监控与优化**：开启慢 SQL 监控后，如果发现偶尔出现执行时间较长的 SQL，可能是由于脏页刷新到磁盘导致的数据库性能波动。此时，可能需要调大 Buffer Pool 空间或 redo log 日志的大小来优化性能。
