@@ -70,13 +70,59 @@ Redis 在功能丰富性、持久化、集群支持、高级特性等方面全�
 
 ## Q6：Redis 有哪些数据结构？
 
+[Redis 数据结构](https://xiaolincoding.com/redis/data_struct/data_struct.html#%E8%BF%9E%E9%94%81%E6%9B%B4%E6%96%B0)
+
 1. 字符串（string）
 
    > `key-value` 结构，不仅可以存放 string，还可以存放 int 类型的数据。value 可以存放 int 和 SDS（简单动态字符串）。
 
     <img src = '../images/string结构-编码方式.webp' width = '500px'>
 
-2. 哈希（hash）
-3. 列表（list）
-4. 集合（set）
-5. 有序集合（sorted set）
+   **SDS 是为了解决 C 语言中字符串的缺陷而产生的**：
+
+   - c 语言获取字符串长度时间复杂度为 O(n)
+   - 字符串里不能含有 '\0'字符，无法保存二进制数据
+   - 不会记录自身缓冲区的大小，字符串合并导致缓冲区溢出
+
+   **SDS 结构**
+
+    <img src='../images/SDS数据结构.webp' width = '300px'>
+
+2. 链表（list）
+
+   > 链表是一种线性数据结构，每个元素都是一个节点，节点之间通过指针连接。Redis 在 listNode 结构体基础上又封装了 list 这个数据结构，这样操作起来会更方便。
+
+   <img src='../images/链表数据结构.webp' width = '500px'>
+
+   **缺陷**
+
+   - 无法很好利用 cpu 缓存。数组能够很好利用。
+   - 链表节点结构头的分配，内存开销大。
+
+3. 压缩列表
+
+   > 为了节约内存而开发，由内存块连续组成的顺序型数据结构，类似于数组。
+
+   <img src='../images/压缩列表数据结构.webp' width='500px'>
+   **缺陷**
+   - 连锁更新。
+   - 查找复杂度高。
+
+4. 哈希表（hash）
+
+   > 哈希表是一种键值对（key-value）数据结构，通过哈希函数将键映射到数组的索引位置，实现快速的插入、删除和查找操作。
+
+   <img src='../images/哈希表数据结构.webp' width='500px'>
+
+   **缺陷**
+
+   - 哈希冲突。
+   - 渐进式 hash。
+
+    <img src='../images/哈希表rehash.webp' width='500px'>
+
+5. 跳表
+
+   > 跳表是一种基于链表的数据结构，通过添加多级索引来实现快速的查找操作。
+
+   <img src='../images/跳表数据结构.webp' width='500px'>
