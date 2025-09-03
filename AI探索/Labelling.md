@@ -1,0 +1,8 @@
+**全文总结**
+图片标注工具labeling（labelImg）的安装与使用方法，由博主吴四维于2020年8月10日发布，遵循CC 4.0 BY - SA版权协议。2025年6月17日被作为最新推荐文章发布。该工具下载地址为https://github.com/tzutalin/labelImg 。若电脑已有python环境和框架，可跳过安装过程，直接参考后续步骤运行。使用labelImg需安装PyQt5、PyQt5_tools、lxml这三个库，可在cmd下通过pip3命令安装，在pycharm中也能使用terminal安装。安装好库后，在cmd进入解压后的文件路径（默认labelImg - master），执行“Pyrcc5 -o resources.py resources.qrc”命令将Qt文件格式转为Python格式，把生成的resources.py拷贝到libs目录下，否则运行时会报错。运行“python labelImg.py”即可启动工具。若要修改标签类别，可在主目录data文件夹的predefined_classes.txt文件中操作。工具启动后的界面操作和标注工作可参考https://www.cnblogs.com/StarZhai/p/11926610.html 。
+**重要亮点**
+- **labelImg下载与安装前提**：labelImg工具可从https://github.com/tzutalin/labelImg获取。若电脑已具备python环境和框架，便无需重复安装基础环境，可直接进入后续运行步骤。这对于已搭建好相关编程环境的用户来说，节省了安装时间，提高了使用效率。例如，一些长期从事图片处理或机器学习项目的开发者，其开发环境中可能已存在满足要求的python环境与框架，就能直接使用该工具。
+ - **依赖库的安装**：labelImg的正常使用依赖PyQt5、PyQt5_tools、lxml这三个库。在cmd命令行下，通过简单的pip3 install命令即可完成安装，如“pip3 install PyQt5”“pip3 install PyQt5_tools”“pip3 install lxml”。若使用pycharm开发工具，也能利用其terminal便捷地完成库的安装。这种安装方式对于熟悉命令行操作的用户来说较为简便，即使是新手，按照步骤操作也能顺利完成安装。
+ - **格式转换与文件放置**：进入解压后的labelImg - master文件路径后，执行“Pyrcc5 -o resources.py resources.qrc”命令，其作用是将Qt文件格式转换为Python格式。转换后生成的resources.py文件需拷贝到同级的libs目录下，否则运行时会出现“no module named libs.resources”的错误提示。这一步骤明确了文件格式转换的目的以及文件放置位置的重要性，若不按要求操作，工具将无法正常运行。
+ - **启动工具与标签修改**：完成上述步骤后，运行“python labelImg.py”即可启动labelImg工具。若用户想要修改标签类别内容，如默认的“dog、person、cat”等，只需在主目录下data文件夹中的predefined_classes.txt文件里进行修改。启动工具和修改标签的操作简单明了，方便用户根据自身需求定制标注工具。
+ - **后续操作参考**：成功运行labeling.py之后，后续界面操作和标注工作可参考https://www.cnblogs.com/StarZhai/p/11926610.html 。该链接为用户提供了详细的后续操作指南，帮助用户快速上手使用labelImg进行图片标注工作，即使对标注工具不太熟悉的用户，也能通过参考该链接顺利完成标注任务。 
